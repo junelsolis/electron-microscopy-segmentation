@@ -1,0 +1,4 @@
+scikit-image==0.22
+tensorflow[and-cuda]
+tqdm
+tiler==0.5.7
