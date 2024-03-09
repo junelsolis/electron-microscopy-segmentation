@@ -113,5 +113,5 @@ if __name__ == "__main__":
             # batch_size=args.batch_size,
         )
 
-        # # evaluate the model
-        # model.evaluate(test_dataset)
+        # evaluate the model
+        model.evaluate(test_dataset)
