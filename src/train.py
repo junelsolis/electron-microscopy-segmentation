@@ -110,10 +110,10 @@ if __name__ == "__main__":
             validation_data=val_dataset,
             epochs=args.epochs,
             callbacks=callbacks,
-            steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
-            // args.batch_size,
-            validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
-            // args.batch_size,
+            # steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
+            # // args.batch_size,
+            # validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
+            # // args.batch_size,
         )
 
         # evaluate the model
