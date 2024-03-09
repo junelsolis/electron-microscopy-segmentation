@@ -33,7 +33,7 @@ def _parse_tf_record(proto):
     image = tf.cast(image, tf.float32) / 255.0
 
     mask = tf.io.decode_png(example["mask"], channels=1)
-    image = tf.image.resize(mask, (256, 256))
+    image = tf.image.resize(mask, (256, 256), method='nearest')
     mask = tf.cast(mask, tf.float32) / 255.0
 
     return image, mask
