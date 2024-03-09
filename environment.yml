@@ -8,7 +8,7 @@ dependencies:
   - tiler=0.5.7
   - tqdm
   - pip:
-      - efficientnet==1.0.*
-      - image-classifiers==1.0.*
-      - keras-applications>=1.0.7<=1.0.8
-      - segmentation_models
+    - efficientnet==1.0.*
+    - image-classifiers==1.0.*
+    - keras-applications>=1.0.7<=1.0.8
+    - segmentation_models
