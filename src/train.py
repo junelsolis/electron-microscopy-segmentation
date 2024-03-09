@@ -45,13 +45,13 @@ if __name__ == "__main__":
         "--dataset", type=str, default=DATASET_PATH, help="Path to TFRecord dataset."
     )
     parser.add_argument(
-        "--model_dir", type=str, default=MODEL_DIR, help="Directory to save models to."
+        "--model-dir", type=str, default=MODEL_DIR, help="Directory to save models to."
     )
     parser.add_argument(
         "--model-name", type=str, default="em-model", help="Name of the model to save."
     )
     parser.add_argument(
-        "--log_dir", type=str, default=LOG_DIR, help="Directory to save logs to."
+        "--log-dir", type=str, default=LOG_DIR, help="Directory to save logs to."
     )
     parser.add_argument(
         "--batch-size", type=int, default=12, help="Batch size to use for training"
