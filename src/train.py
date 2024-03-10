@@ -29,11 +29,11 @@ def _parse_tf_record(proto):
     example = tf.io.parse_single_example(proto, feature_description)
 
     image = tf.io.decode_png(example["image"], channels=1)
-    image = tf.image.resize(image, (256, 256))
+    # image = tf.image.resize(image, (256, 256))
     image = tf.cast(image, tf.float32) / 255.0
 
     mask = tf.io.decode_png(example["mask"], channels=1)
-    image = tf.image.resize(mask, (256, 256), method='nearest')
+    # image = tf.image.resize(mask, (256, 256), method='nearest')
     mask = tf.cast(mask, tf.float32) / 255.0
 
     return image, mask
@@ -107,27 +107,27 @@ if __name__ == "__main__":
         test_dataset = test_dataset.map(_parse_tf_record)
         test_dataset = test_dataset.batch(args.batch_size)
         
-        for inputs, targets in train_dataset.take(1):  # Take a single batch
-            outputs = model(inputs)
-            print("Output shape:", outputs.shape)
-            print("Target shape:", targets.shape)
+        # for inputs, targets in train_dataset.take(1):  # Take a single batch
+        #     outputs = model(inputs)
+        #     print("Output shape:", outputs.shape)
+        #     print("Target shape:", targets.shape)
             
-        for inputs, targets in val_dataset.take(1):  # Take a single batch
-            outputs = model(inputs)
-            print("Output shape:", outputs.shape)
-            print("Target shape:", targets.shape)
+        # for inputs, targets in val_dataset.take(1):  # Take a single batch
+        #     outputs = model(inputs)
+        #     print("Output shape:", outputs.shape)
+        #     print("Target shape:", targets.shape)
 
-        # # train the model
-        # model.fit(
-        #     train_dataset,
-        #     validation_data=val_dataset,
-        #     epochs=args.epochs,
-        #     callbacks=callbacks,
-        #     # steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
-        #     # // args.batch_size,
-        #     # validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
-        #     # // args.batch_size,
-        # )
+        # train the model
+        model.fit(
+            train_dataset,
+            validation_data=val_dataset,
+            epochs=args.epochs,
+            callbacks=callbacks,
+            # steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
+            # // args.batch_size,
+            # validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
+            # // args.batch_size,
+        )
 
-        # # evaluate the model
-        # model.evaluate(test_dataset)
+        # evaluate the model
+        model.evaluate(test_dataset)
