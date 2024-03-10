@@ -94,40 +94,40 @@ if __name__ == "__main__":
             metrics=[sm.metrics.f1_score, sm.metrics.iou_score],
         )
 
-        # configure datasets
-        train_dataset = tf.data.TFRecordDataset(f"{args.dataset}/train.tfrecord")
-        train_dataset = train_dataset.map(_parse_tf_record)
-        train_dataset = train_dataset.batch(args.batch_size)
+    # configure datasets
+    train_dataset = tf.data.TFRecordDataset(f"{args.dataset}/train.tfrecord")
+    train_dataset = train_dataset.map(_parse_tf_record)
+    train_dataset = train_dataset.batch(args.batch_size)
 
-        val_dataset = tf.data.TFRecordDataset(f"{args.dataset}/val.tfrecord")
-        val_dataset = val_dataset.map(_parse_tf_record)
-        val_dataset = val_dataset.batch(args.batch_size)
+    val_dataset = tf.data.TFRecordDataset(f"{args.dataset}/val.tfrecord")
+    val_dataset = val_dataset.map(_parse_tf_record)
+    val_dataset = val_dataset.batch(args.batch_size)
 
-        test_dataset = tf.data.TFRecordDataset(f"{args.dataset}/test.tfrecord")
-        test_dataset = test_dataset.map(_parse_tf_record)
-        test_dataset = test_dataset.batch(args.batch_size)
+    test_dataset = tf.data.TFRecordDataset(f"{args.dataset}/test.tfrecord")
+    test_dataset = test_dataset.map(_parse_tf_record)
+    test_dataset = test_dataset.batch(args.batch_size)
         
-        # for inputs, targets in train_dataset.take(1):  # Take a single batch
-        #     outputs = model(inputs)
-        #     print("Output shape:", outputs.shape)
-        #     print("Target shape:", targets.shape)
-            
-        # for inputs, targets in val_dataset.take(1):  # Take a single batch
-        #     outputs = model(inputs)
-        #     print("Output shape:", outputs.shape)
-        #     print("Target shape:", targets.shape)
+    # for inputs, targets in train_dataset.take(1):  # Take a single batch
+    #     outputs = model(inputs)
+    #     print("Output shape:", outputs.shape)
+    #     print("Target shape:", targets.shape)
+        
+    # for inputs, targets in val_dataset.take(1):  # Take a single batch
+    #     outputs = model(inputs)
+    #     print("Output shape:", outputs.shape)
+    #     print("Target shape:", targets.shape)
 
-        # train the model
-        model.fit(
-            train_dataset,
-            validation_data=val_dataset,
-            epochs=args.epochs,
-            callbacks=callbacks,
-            # steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
-            # // args.batch_size,
-            # validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
-            # // args.batch_size,
-        )
+    # train the model
+    model.fit(
+        train_dataset,
+        validation_data=val_dataset,
+        epochs=args.epochs,
+        callbacks=callbacks,
+        # steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
+        # // args.batch_size,
+        # validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
+        # // args.batch_size,
+    )
 
-        # evaluate the model
-        model.evaluate(test_dataset)
+    # evaluate the model
+    model.evaluate(test_dataset)
