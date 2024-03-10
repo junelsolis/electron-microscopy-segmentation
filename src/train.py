@@ -17,7 +17,7 @@ MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")
 
 BACKBONE = "resnet34"
-LEARNING_RATE = 0.0001
+LEARNING_RATE = 0.0025
 
 
 def _parse_tf_record(proto):
@@ -33,7 +33,7 @@ def _parse_tf_record(proto):
     image = tf.cast(image, tf.float32) / 255.0
 
     mask = tf.io.decode_png(example["mask"], channels=1)
-    image = tf.image.resize(mask, (256, 256), method='nearest')
+    image = tf.image.resize(mask, (256, 256), method="nearest")
     mask = tf.cast(mask, tf.float32) / 255.0
 
     return image, mask
@@ -65,17 +65,18 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # configure callbacks
-    callbacks = [
-        tf.keras.callbacks.ModelCheckpoint(
-            os.path.join(args.model_dir, f"{args.model_name}.keras"),
-            save_best_only=True,
-        ),
-        tf.keras.callbacks.TensorBoard(log_dir=args.log_dir),
-        tf.keras.callbacks.ReduceLROnPlateau(
-            monitor="val_loss", factor=0.2, patience=10, min_delta=0.0001, min_lr=1e-10
-        ),
-    ]
+    checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(
+        os.path.join(args.model_dir, f"{args.model_name}.keras"),
+        save_best_only=True,
+        monitor="val_loss",
+        mode="min",
+        save_weights_only=False,
+        verbose=1,
+    )
 
+    reduce_lr_cb = tf.keras.callbacks.ReduceLROnPlateau(
+        monitor="val_loss", factor=0.1, patience=10, mode="min", min_lr=1e-9
+    )
     # data parallelism mirrored strategy
     strategy = tf.distribute.MirroredStrategy()
     with strategy.scope():
@@ -106,23 +107,13 @@ if __name__ == "__main__":
     test_dataset = tf.data.TFRecordDataset(f"{args.dataset}/test.tfrecord")
     test_dataset = test_dataset.map(_parse_tf_record)
     test_dataset = test_dataset.batch(args.batch_size)
-        
-    # for inputs, targets in train_dataset.take(1):  # Take a single batch
-    #     outputs = model(inputs)
-    #     print("Output shape:", outputs.shape)
-    #     print("Target shape:", targets.shape)
-        
-    # for inputs, targets in val_dataset.take(1):  # Take a single batch
-    #     outputs = model(inputs)
-    #     print("Output shape:", outputs.shape)
-    #     print("Target shape:", targets.shape)
 
     # train the model
     model.fit(
         train_dataset,
         validation_data=val_dataset,
         epochs=args.epochs,
-        callbacks=callbacks,
+        callbacks=[checkpoint_cb, reduce_lr_cb],
         # steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
         # // args.batch_size,
         # validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
