@@ -91,7 +91,8 @@ if __name__ == "__main__":
 
         model.compile(
             optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
-            loss=sm.losses.jaccard_loss,
+            # loss=sm.losses.jaccard_loss,
+            loss=sm.losses.dice_loss,
             metrics=[sm.metrics.f1_score, sm.metrics.iou_score],
         )
 
