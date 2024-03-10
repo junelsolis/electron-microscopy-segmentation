@@ -16,8 +16,8 @@ DATASET_PATH = os.path.join(os.path.dirname(__file__), "..", "dataset")
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")
 
-BACKBONE = "resnet34"
-LEARNING_RATE = 0.0025
+BACKBONE = "incepcionresnetv2"
+LEARNING_RATE = 1e-4
 
 
 def _parse_tf_record(proto):
