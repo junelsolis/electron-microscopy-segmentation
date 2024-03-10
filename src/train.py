@@ -16,7 +16,7 @@ DATASET_PATH = os.path.join(os.path.dirname(__file__), "..", "dataset")
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")
 
-BACKBONE = "inceptionresnetv2"
+BACKBONE = "resnet34"
 LEARNING_RATE = 0.0025
 
 
@@ -29,11 +29,9 @@ def _parse_tf_record(proto):
     example = tf.io.parse_single_example(proto, feature_description)
 
     image = tf.io.decode_png(example["image"], channels=1)
-    image = tf.image.resize(image, (256, 256))
     image = tf.cast(image, tf.float32) / 255.0
 
     mask = tf.io.decode_png(example["mask"], channels=1)
-    image = tf.image.resize(mask, (256, 256), method="nearest")
     mask = tf.cast(mask, tf.float32) / 255.0
 
     return image, mask
@@ -91,8 +89,7 @@ if __name__ == "__main__":
 
         model.compile(
             optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
-            # loss=sm.losses.jaccard_loss,
-            loss=sm.losses.dice_loss,
+            loss=sm.losses.jaccard_loss,
             metrics=[sm.metrics.f1_score, sm.metrics.iou_score],
         )
 
@@ -115,10 +112,6 @@ if __name__ == "__main__":
         validation_data=val_dataset,
         epochs=args.epochs,
         callbacks=[checkpoint_cb, reduce_lr_cb],
-        # steps_per_epoch=tf.data.experimental.cardinality(train_dataset).numpy()
-        # // args.batch_size,
-        # validation_steps=tf.data.experimental.cardinality(val_dataset).numpy()
-        # // args.batch_size,
     )
 
     # evaluate the model

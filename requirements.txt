@@ -1,6 +1,6 @@
-efficientnet == 1.0.*
-image-classifiers == 1.0.*
-keras-applications>= 1.0.7,<=1.0.8
+# efficientnet == 1.0.*
+# image-classifiers == 1.0.*
+# keras-applications>= 1.0.7,<=1.0.8
 scikit-image==0.22
 tensorflow[and-cuda]
 tiler==0.5.7
