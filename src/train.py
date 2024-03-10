@@ -75,7 +75,7 @@ if __name__ == "__main__":
     )
 
     reduce_lr_cb = tf.keras.callbacks.ReduceLROnPlateau(
-        monitor="val_loss", factor=0.1, patience=10, mode="min", min_lr=1e-9
+        monitor="val_loss", factor=0.1, patience=25, mode="min", min_lr=1e-9
     )
     # data parallelism mirrored strategy
     strategy = tf.distribute.MirroredStrategy()
