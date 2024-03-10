@@ -16,7 +16,7 @@ DATASET_PATH = os.path.join(os.path.dirname(__file__), "..", "dataset")
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")
 
-BACKBONE = "resnet34"
+BACKBONE = "inceptionresnetv2"
 LEARNING_RATE = 0.0025
 
 
